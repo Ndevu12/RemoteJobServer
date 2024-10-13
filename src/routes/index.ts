@@ -1,6 +1,6 @@
 import jobRoutes from './jobRoutes';
 import accountRoutes from './accountRoutes';
-import express, { Router } from 'express';
+import { Router } from 'express';
 import path from 'path';
 import authRoutes from './authRoutes';
 import addressRoutes from './addressRoutes';
@@ -20,5 +20,6 @@ router.use('/skills', skillRoutes);
 router.use('/experiences', experienceRoutes);
 router.use(companyRoutes);
 router.use(appliedJobRoutes);
+router.use(jobRoutes);
 
 export default router;
