@@ -1,24 +1,20 @@
 import mongoose, { Schema, Document } from 'mongoose';
-
-interface ICompany {
-  name: string;
-  website: string;
-  logo: string;
-  logoBackground: string;
-}
+import CompanySchema, { ICompany } from './Company';
+import AppliedJobSchema, { IAppliedJob } from './AppliedJob';
+import { IUser } from './User'; // Import the IUser interface
+import { required } from 'joi';
 
 interface IRequirement {
   content: string;
   items: string[];
 }
 
-interface IAppliedJob {
-  userId: string;
-  appliedAt: Date;
-  status: string;
-}
+const RequirementSchema: Schema = new Schema({
+  content: { type: String, required: true },
+  items: { type: [String], required: true },
+});
 
-interface IJob extends Document {
+export interface IJob extends Document {
   company: ICompany;
   postedAt: Date;
   contract: string;
@@ -33,29 +29,12 @@ interface IJob extends Document {
   role: IRequirement;
   status: string;
   appliedJobs: IAppliedJob[];
+  userId: IUser['_id']; // Add userId field
 }
 
-const CompanySchema: Schema = new Schema({
-  name: { type: String, required: true },
-  website: { type: String, required: true },
-  logo: { type: String, required: true },
-  logoBackground: { type: String, required: true },
-});
-
-const RequirementSchema: Schema = new Schema({
-  content: { type: String, required: true },
-  items: { type: [String], required: true },
-});
-
-const AppliedJobSchema: Schema = new Schema({
-  userId: { type: String, required: true },
-  appliedAt: { type: Date, required: true },
-  status: { type: String, required: true },
-});
-
 const JobSchema: Schema = new Schema({
-  company: { type: CompanySchema, required: true },
-  postedAt: { type: Date, required: true },
+  company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
+  postedAt: { type: Date, default: Date.now, required: true },
   contract: { type: String, required: true },
   position: { type: String, required: true },
   location: { type: String, required: true },
@@ -67,7 +46,8 @@ const JobSchema: Schema = new Schema({
   benefits: { type: RequirementSchema, required: true },
   role: { type: RequirementSchema, required: true },
   status: { type: String, required: true },
-  appliedJobs: { type: [AppliedJobSchema], required: true },
+  appliedJobs: [{ type: Schema.Types.ObjectId, ref: 'AppliedJob', default: [] }],
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Add userId field
 });
 
 const Job = mongoose.model<IJob>('Job', JobSchema);

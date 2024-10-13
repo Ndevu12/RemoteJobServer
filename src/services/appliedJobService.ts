@@ -22,7 +22,7 @@ class AppliedJobService {
   // Get an applied job entry by ID
   async getAppliedJobById(appliedJobId: string) {
     try {
-      const appliedJob = await AppliedJob.findById(appliedJobId).populate('userId');
+      const appliedJob = await AppliedJob.findById(appliedJobId).populate('userId').populate('jobId');
       if (!appliedJob) {
         return { status: 404, message: 'Applied job not found' };
       }
@@ -36,7 +36,7 @@ class AppliedJobService {
   // Update an applied job entry
   async updateAppliedJob(appliedJobId: string, input: Partial<IAppliedJob>) {
     try {
-      const appliedJob = await AppliedJob.findByIdAndUpdate(appliedJobId, input, { new: true }).populate('userId');
+      const appliedJob = await AppliedJob.findByIdAndUpdate(appliedJobId, input, { new: true }).populate('userId').populate('jobId');
       if (!appliedJob) {
         return { status: 404, message: 'Applied job not found' };
       }
@@ -50,7 +50,7 @@ class AppliedJobService {
   // Delete an applied job entry
   async deleteAppliedJob(appliedJobId: string) {
     try {
-      const appliedJob = await AppliedJob.findByIdAndDelete(appliedJobId).populate('userId');
+      const appliedJob = await AppliedJob.findByIdAndDelete(appliedJobId).populate('userId').populate('jobId');
       if (!appliedJob) {
         return { status: 404, message: 'Applied job not found' };
       }

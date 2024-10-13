@@ -1,14 +1,14 @@
-import { Router } from "express";
-import { Job } from '../controllers/job'
-import { isUserAuth } from '../middleware/isAuth'
+import { Router } from 'express';
+import JobController from '../controllers/jobController';
+import { isAuth } from '../middleware/isAuth';
 
 const router = Router();
-const jobControllers = new Job();
 
-router.get('/', jobControllers.getJobs);
-router.get('/:id', jobControllers.getJob);
-router.put('/:id', jobControllers.putJob);
-router.delete('/:id', jobControllers.deleteJob);
-router.post('/apply/:id', isUserAuth, jobControllers.postApplyJob);
+// Route to get all jobs
+router.get('/jobs', JobController.getAllJobs);
+router.post('/jobs', isAuth, JobController.createJob);
+router.get('/jobs/:jobId', JobController.getJobById);
+router.put('/jobs/:jobId', isAuth, JobController.updateJob);
+router.delete('/jobs/:jobId', isAuth, JobController.deleteJob);
 
 export default router;
