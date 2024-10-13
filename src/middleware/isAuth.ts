@@ -2,12 +2,14 @@ import { RequestHandler, Request } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import User from "../models/User";
+import User, { IUser } from "../models/User";
+import logger from "../utils/logger";
 
 declare global {
     namespace Express {
         interface Request {
             userId?: string;
+            user?: mongoose.Document<unknown, {}, IUser> & IUser & { _id: mongoose.Types.ObjectId };
         }
     }
 }
@@ -17,6 +19,7 @@ export const isAuth: RequestHandler = async (req, res, next) => {
         const header = req.get('Authorization');
 
         if (!header) {
+            logger.info('You\'re not authorized.');
             return res.status(401).json({ message: "You're not authorized." });
         }
 
@@ -24,6 +27,7 @@ export const isAuth: RequestHandler = async (req, res, next) => {
         const decodedToken = jwt.verify(token, `${process.env.JWT_SECRET}`) as JwtPayload;
 
         if (!decodedToken) {
+            logger.info('You\'re not authorized.');
             return res.status(401).json({ message: "You're not authorized." });
         }
 
@@ -33,6 +37,7 @@ export const isAuth: RequestHandler = async (req, res, next) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+        req.user = user as mongoose.Document<unknown, {}, IUser> & IUser & { _id: mongoose.Types.ObjectId };
 
         next();
     } catch (err) {

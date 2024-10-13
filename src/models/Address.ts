@@ -4,18 +4,18 @@ export interface IAddress extends Document {
   street: string;
   city: string;
   state: string;
-  zip: string;
+  zipCode: string;
   country: string;
+  user: mongoose.Types.ObjectId; // Reference to the User model
 }
 
 const AddressSchema: Schema = new Schema({
-  street: { type: String, default: '' },
-  city: { type: String, default: '' },
-  state: { type: String, default: '' },
-  zip: { type: String, default: '' },
-  country: { type: String, default: '' },
+  street: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  zipCode: { type: String, required: true },
+  country: { type: String, required: true },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the User model
 });
 
-const Address = mongoose.model<IAddress>('Address', AddressSchema);
-
-export default Address;
+export default mongoose.model<IAddress>('Address', AddressSchema);
