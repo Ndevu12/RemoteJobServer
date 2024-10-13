@@ -6,7 +6,7 @@ import Education, { IEducation } from './Education';
 import Experience, { IExperience } from './Experience';
 import Skill, { ISkill } from './Skill';
 
-interface IUser extends Document {
+export interface IUser extends Document {
   profileImage?: string;
   name: string;
   email: string;
