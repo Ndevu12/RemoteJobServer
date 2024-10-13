@@ -5,6 +5,13 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import path from 'path';
 import connectDB from "./mongooseConfig";
+import './models/Address';
+import './models/Company';
+import './models/AppliedJob';
+import './models/Education';
+import './models/Experience';
+import './models/Skill';
+import './models/User';
 
 dotenv.config();
 

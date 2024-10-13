@@ -1,15 +1,14 @@
 import jobRoutes from './jobRoutes';
-import authRoutes from './userRoute';
 import accountRoutes from './accountRoutes';
 import express, { Router } from 'express';
 import path from 'path';
+import authRoutes from './authRoutes';
 
 const router = Router();
 
-// router.use('/images', express.static(path.join(__dirname, '..', 'images')));
-// router.use('/jobs', jobRoutes)
-// router.use('/account', accountRoutes)
-router.use('/user', authRoutes)
+router.use('/auth', authRoutes);
+router.use('/account', accountRoutes);
+
 
 
 export default router;

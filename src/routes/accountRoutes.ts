@@ -1,11 +1,26 @@
-import { Router } from "express";
-import { Account } from '../controllers/profile'
-import { isAuth } from '../middleware/isAuth'
+import { Router } from 'express';
+import AccountController from '../controllers/accountController';
+import multer from '../middleware/Uploader'
 
 const router = Router();
 
-const accountControllers = new Account();
+// Get user information
+router.get('/:userId', AccountController.getUserInfo);
 
-router.get('/', isAuth, accountControllers.getAccountInfo);
+// Update user information
+router.put('/:userId', multer.single('profileImage'), AccountController.updateUser);
+
+// Delete user
+router.delete('/:userId', AccountController.deleteUser);
 
 export default router;
+
+// import { isAuth } from '../middleware/isAuth'
+
+// const router = Router();
+
+// const accountControllers = new Account();
+
+// router.get('/', isAuth, accountControllers.getAccountInfo);
+
+// export default router;
