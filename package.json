@@ -7,7 +7,7 @@
     "test": "cross-env APP_ENV=test jest --coverage --detectOpenHandles --verbose --runInBand ",
     "dev": "cross-env APP_ENV=dev NODE_OPTIONS='--max-old-space-size=4096' nodemon src/app.ts",
     "build": "rm -rf node_modules dist && yarn install && tsc -p .",
-    "start": "node dist/index.js"
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
