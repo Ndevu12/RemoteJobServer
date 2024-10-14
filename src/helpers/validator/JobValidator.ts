@@ -6,7 +6,7 @@ export const jobSchema = Joi.object({
     name: Joi.string().required(),
     website: Joi.string().uri().required(),
     logo: Joi.string().uri().required(),
-    logoBackground: Joi.string().required(),
+    logoBackground: Joi.string().optional(),
   }).required(),
   contract: Joi.string().required(),
   position: Joi.string().required(),

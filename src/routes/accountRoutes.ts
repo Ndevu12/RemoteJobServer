@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import AccountController from '../controllers/accountController';
 import multer from '../middleware/Uploader'
+import { isAdminAuth, isAuth } from '../middleware/isAuth';
 
 const router = Router();
 
@@ -8,19 +9,9 @@ const router = Router();
 router.get('/:userId', AccountController.getUserInfo);
 
 // Update user information
-router.put('/:userId', multer.single('profileImage'), AccountController.updateUser);
+router.put('/', isAuth, multer.single('profileImage'), AccountController.updateUser);
 
 // Delete user
-router.delete('/:userId', AccountController.deleteUser);
+router.delete('/:userId', isAdminAuth, AccountController.deleteUser);
 
 export default router;
-
-// import { isAuth } from '../middleware/isAuth'
-
-// const router = Router();
-
-// const accountControllers = new Account();
-
-// router.get('/', isAuth, accountControllers.getAccountInfo);
-
-// export default router;
