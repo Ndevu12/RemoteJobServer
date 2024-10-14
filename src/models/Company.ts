@@ -13,7 +13,7 @@ const CompanySchema: Schema = new Schema({
   website: { type: String, default: '' },
   logo: { type: String, default: '' },
   userId: { type: String, required: true },
-  logoBackground: { type: String, default: '' },
+  logoBackground: { type: String, default: '#FFFFFF' },
 });
 
 const Company = mongoose.model<ICompany>('Company', CompanySchema);
