@@ -17,7 +17,7 @@ dotenv.config();
 
 const app: Application = express();
 
-const client_url = process.env.CLIENT_URL || 'http://localhost:3000';
+const client_url = process.env.CLIENT_URL || 'https://remotewor.netlify.app';
 const corsOptions = {
     origin: client_url,
     credentials: true,
