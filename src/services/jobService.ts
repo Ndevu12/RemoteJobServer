@@ -117,8 +117,8 @@ class JobService {
 
       const user = await User.findById(userId);
       if (!user || !user.cv) {
-        logger.error('User CV not found');
-        return { status: 400, message: 'User CV not found' };
+        logger.error('Your CV not found');
+        return { status: 400, message: 'Your CV not found' };
       }
 
       const appliedJob = new AppliedJob({
