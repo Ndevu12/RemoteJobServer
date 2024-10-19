@@ -10,6 +10,7 @@ router.get('/:userId', AccountController.getUserInfo);
 
 // Update user information
 router.put('/', isAuth, multer.single('profileImage'), AccountController.updateUser);
+router.put('/upload-cv', isAuth, multer.single('cv'), AccountController.upLoadCV);
 
 // Delete user
 router.delete('/:userId', isAdminAuth, AccountController.deleteUser);
