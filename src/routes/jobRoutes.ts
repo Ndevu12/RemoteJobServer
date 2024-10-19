@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import JobController from '../controllers/jobController';
 import { isAuth } from '../middleware/isAuth';
+import multer from '../middleware/Uploader'
 
 const router = Router();
 
@@ -13,6 +14,6 @@ router.delete('/jobs/:jobId', isAuth, JobController.deleteJob);
 
 // Apply routes
 router.post('/jobs/:jobId/apply/existing', isAuth , JobController.applyWithExistingCV);
-router.post('/jobs/:jobId/apply/new', isAuth, JobController.applyWithNewCV);
+router.post('/jobs/:jobId/apply/new', isAuth, multer.single('cv'), JobController.applyWithNewCV);
 
 export default router;

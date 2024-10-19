@@ -1,8 +1,11 @@
+import { Request } from 'express';
 import AppliedJob from '../models/AppliedJob';
 import Company from '../models/Company';
 import Job, { IJob } from '../models/Job';
 import User from '../models/User';
 import logger from '../utils/logger';
+import cloudinary from '../utils/claudinary';
+import AccountService from './accountService';
 
 class JobService {
   // Create a new job entry
@@ -131,8 +134,12 @@ class JobService {
       });
 
       await appliedJob.save();
-      job.appliedJobs.push(appliedJob._id as any); // Cast to any to avoid type error
-      await job.save();
+      if (user.appliedJobs) {
+        user.appliedJobs.push(appliedJob._id as any);
+      } else {
+        user.appliedJobs = [appliedJob._id as any];
+      }
+      await user.save();
 
       return { status: 200, message: 'Applied successfully' };
     } catch (error: any) {
@@ -142,12 +149,33 @@ class JobService {
   }
 
   // Apply for a job with a new CV
-  async applyWithNewCV(jobId: string, userId: string, cv: string) {
+  async applyWithNewCV(jobId: string, userId: string, req: Request) {
     try {
       const job = await Job.findById(jobId);
       if (!job) {
         return { status: 404, message: 'Job not found' };
       }
+
+      const { user } = await AccountService.findById(userId);
+  
+      if (!user) {
+        return { status: 404, message: 'User not found' };
+      }
+  
+      let cv = '';
+
+        // Handl`e profile image update
+        if (req.file) {
+          const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'cv',
+          });
+          cv = result.secure_url;
+        }
+
+        user.cv = cv || user.cv;
+  
+        await user.save();
+
 
       const appliedJob = new AppliedJob({
         jobId,
@@ -159,10 +187,16 @@ class JobService {
       });
 
       await appliedJob.save();
-      job.appliedJobs.push(appliedJob._id as any);
-      await job.save();
+
+      if (user.appliedJobs) {
+        user.appliedJobs.push(appliedJob._id as any);
+      } else {
+        user.appliedJobs = [appliedJob._id as any];
+      }
+      await user.save();
 
       return { status: 200, message: 'Applied successfully' };
+    
     } catch (error: any) {
       logger.error('Error applying for job: %o', error);
       return { status: 500, message: 'Server error. Try again later.', error: error.message };
