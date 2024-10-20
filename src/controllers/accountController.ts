@@ -8,9 +8,9 @@ class AccountController {
     try {
       const { userId } = req.params;
       const result = await AccountService.getUserInfo(userId);
-      return res.status(result.status).json({ message: result, user: result.user });
+      return res.status(result.status).json({ message: 'Account info. retrieved successfully', account: result.user });
     } catch (error: any) {
-      return res.status(500).json({ message: 'Server error', error: error.message });
+      return res.status(500).json({ message: 'Network Error', error: error.message });
     }
   }
 
@@ -23,12 +23,25 @@ class AccountController {
       }
       const userId = req.user.id;
       const result = await AccountService.updateUser(userId, req.body, req);
-      return res.status(result.status).json({ message: result.message, user: result.user });
+      return res.status(result.status).json({ message: result.message, account: result.user });
     } catch (error: any) {
-      return res.status(500).json({ message: 'Server error', error: error.message });
+      return res.status(500).json({ message: 'Network Error', error: error.message });
     }
   }
 
+  async upLoadCV (req: Request, res: Response){
+    try {
+      if (!req.user) {
+        logger.error('User not authenticated', { label: 'AccountController' });
+        return res.status(401).json({ message: 'User not authenticated' });
+      }
+      const userId = req.user.id;
+      const result = await AccountService.upLoadCV(userId, req);
+      return res.status(result.status).json({ message: result.message, account: result.user });
+    } catch (error: any){
+      return res.status(500).json({ message: 'Network Error', error: error.message });
+    }
+  }
   // Delete user
   async deleteUser(req: Request, res: Response) {
     try {
@@ -36,7 +49,7 @@ class AccountController {
       const result = await AccountService.deleteUser(userId);
       return res.status(result.status).json({ message: result.message });
     } catch (error: any) {
-      return res.status(500).json({ message: 'Server error', error: error.message });
+      return res.status(500).json({ message: 'Network Error', error: error.message });
     }
   }
 }

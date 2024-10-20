@@ -7,7 +7,7 @@ export default multer({
     try {
     const ext = path.extname(file.originalname).toLowerCase();
     console.log(ext);
-    const supported = ['.png', '.jpg', '.jpeg', '.webp'];
+    const supported = ['.png', '.jpg', '.jpeg', '.webp', '.pdf'];
     
     if (!supported.includes(ext)) {
       console.log('Unsupported file: ', ext);
