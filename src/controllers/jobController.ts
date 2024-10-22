@@ -111,14 +111,13 @@ class JobController {
             logger.info('User not authenticated');
         return res.status(400).json({ message: 'Invalid Job ID' });
       }
-          const userId = req.user.id; // Use req.userId from the middleware
-          const { cv } = req.body;
+          const userId = req.user.id;
           if (!jobId || !mongoose.Types.ObjectId.isValid(jobId)) {
             logger.info('Invalid Job ID: %s', jobId);
             return res.status(400).json({ message: 'Invalid Job ID' });
           }
-          const result = await JobService.applyWithNewCV(jobId, userId, cv);
-          return res.status(result.status).json({ message: result.message });
+          const result = await JobService.applyWithNewCV(jobId, userId, req);
+          return res.status(result?.status).json({ message: result.message });
         } catch (error: any) {
           return res.status(500).json({ message: 'Server error', error: error.message });
         }

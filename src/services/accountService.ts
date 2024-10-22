@@ -24,7 +24,7 @@ class AccountService {
   // Find user by ID
   async findById(userId: string) {
     try {
-      const user = await User.findById(userId).populate('address');
+      const user = await User.findById(userId).populate('address').populate('appliedJobs');
       if (!user) {
         return { status: 404, message: 'User not found' };
       }
@@ -67,8 +67,6 @@ class AccountService {
           }
         }
 
-        logger.debug('============== Input =================: %o', input);
-
         if (input.phone && input.phone !== user.user.phone) {
           const existingUserByPhone = await User.findOne({ phone: input.phone });
           if (existingUserByPhone) {
@@ -90,7 +88,6 @@ class AccountService {
           const { street, city, state, zipCode, country } = input.address;
           if (!street || !city || !state || !zipCode || !country) {
             logger.info('All address fields are required\n');
-            console.log('All address fields are required\n', { city, state, zipCode, country });
             return { status: 400, message: 'All address fields are required' };
           }
 
@@ -154,7 +151,7 @@ class AccountService {
       let cv = '';
 
       if (user.user) {  
-        // Handle profile image update
+        // Handl`e profile image update
         if (req.file) {
           const result = await cloudinary.uploader.upload(req.file.path, {
             folder: 'cv',
